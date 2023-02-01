@@ -3,14 +3,25 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 from dotenv import load_dotenv
 import os
 import random
+from main import detect_intent_texts
+
+PROJECT_ID = os.getenv('DIALOGFLOW_PROJECT_ID')
+SESSION_ID = os.getenv('DIALOGFLOW_SESSION_ID')
 
 
 def echo(event, vk_api):
+    answer = detect_intent_texts(
+        PROJECT_ID,
+        SESSION_ID,
+        event.text,
+        language_code='ru-RU'
+    )
     vk_api.messages.send(
         user_id=event.user_id,
-        message=event.text,
-        random_id=random.randint(1,1000)
+        message=answer,
+        random_id=random.randint(1, 1000)
     )
+
 
 if __name__ == "__main__":
     load_dotenv()
@@ -21,4 +32,3 @@ if __name__ == "__main__":
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
             echo(event, vk_api)
-
