@@ -13,8 +13,8 @@ import logging
 
 def echo(event, vk_api):
     answer = detect_intent_texts(
-        session_id,
         project_id,
+        session_id,
         event.text,
         language_code='ru-RU'
     )
