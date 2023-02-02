@@ -1,9 +1,3 @@
-import os
-from telebot import TeleBot
-from telebot import types
-from dotenv import load_dotenv
-from google.cloud import dialogflow_v2beta1 as dialogflow
-
 
 def detect_intent_texts(project_id, session_id, texts, language_code):
     from google.cloud import dialogflow
@@ -29,17 +23,9 @@ def detect_intent_texts(project_id, session_id, texts, language_code):
         )
     )
 
-    return response.query_result
+    return (
+        response.query_result
+    )
 
 
-if __name__ == '__main__':
-    load_dotenv()
-    BOT_TOKEN = os.getenv("TG_BOT_TOKEN")
-    CHAT_ID = os.getenv("TG_CHAT_ID")
-    os.getenv('GOOGLE_APPLICATION_CREDENTIALS')
-    project_id = os.getenv('DIALOGFLOW_PROJECT_ID')
-    session_id = os.getenv('DIALOGFLOW_SESSION_ID')
-    text = input('Введи слово: \n')
 
-    dialogflow_response = detect_intent_texts(project_id, session_id, texts=text, language_code='ru-RU')
-    print(dialogflow_response.fulfillment_text)
