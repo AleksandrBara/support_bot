@@ -10,14 +10,11 @@ from secondary_func import (
 from telebot import TeleBot
 import logging
 
-PROJECT_ID = os.getenv('DIALOGFLOW_PROJECT_ID')
-SESSION_ID = os.getenv('DIALOGFLOW_SESSION_ID')
-
 
 def echo(event, vk_api):
     answer = detect_intent_texts(
-        PROJECT_ID,
-        SESSION_ID,
+        session_id,
+        project_id,
         event.text,
         language_code='ru-RU'
     )
@@ -42,6 +39,8 @@ def bot_srart():
 
 if __name__ == "__main__":
     load_dotenv()
+    project_id = os.getenv('DIALOGFLOW_PROJECT_ID')
+    session_id = os.getenv('DIALOGFLOW_SESSION_ID')
     vk_group_token = os.getenv('VK_KEY')
     bot_token = os.getenv("TG_BOT_TOKEN")
     chat_id = os.getenv("TG_CHAT_ID")
