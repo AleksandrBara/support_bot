@@ -4,7 +4,7 @@
 
 ## Пример работы `tg_bot.py`:
 
-![ВОТ](/home/student/Видео/output_out.gif)
+![ВОТ](tg_chat.gif)
 
 
 ## Установка
