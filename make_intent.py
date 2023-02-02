@@ -39,10 +39,9 @@ if __name__ == '__main__':
     questions = json.loads(questions_json)
 
     for question, phrases in questions.items():
-        if question in 'Устройство на работу':
-            create_intent(
-                project_id,
-                question,
-                phrases['questions'],
-                [phrases['answer']]
-            )
+        create_intent(
+            project_id,
+            question,
+            phrases['questions'],
+            [phrases['answer']]
+        )
