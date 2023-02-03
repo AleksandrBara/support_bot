@@ -9,7 +9,7 @@ from telebot import TeleBot
 import logging
 
 
-def echo(event, vk_api):
+def answer_to_user(event, vk_api):
     answer = detect_intent_texts(
         project_id,
         session_id,
@@ -33,7 +33,7 @@ def bot_srart():
     longpoll = VkLongPoll(vk_session)
     for event in longpoll.listen():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-            echo(event, vk_api)
+            answer_to_user(event, vk_api)
 
 
 if __name__ == "__main__":
