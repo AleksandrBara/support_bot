@@ -3,10 +3,8 @@ from vk_api.longpoll import VkLongPoll, VkEventType
 from dotenv import load_dotenv
 import os
 import random
-from secondary_func import (
-    detect_intent_texts,
-    TelegramLogsHandler
-)
+from get_intent_text import detect_intent_texts
+from bot_logging import TelegramLogsHandler
 from telebot import TeleBot
 import logging
 
@@ -18,9 +16,10 @@ def echo(event, vk_api):
         event.text,
         language_code='ru-RU'
     )
-    print(answer.intent.is_fallback)
+
     if answer.intent.is_fallback:
         return
+
     vk_api.messages.send(
         user_id=event.user_id,
         message=answer.fulfillment_text,
