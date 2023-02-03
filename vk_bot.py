@@ -8,6 +8,8 @@ from bot_logging import TelegramLogsHandler
 from telebot import TeleBot
 import logging
 
+logger = logging.getLogger()
+
 
 def answer_to_user(event, vk_api):
     answer = detect_intent_texts(
@@ -46,12 +48,11 @@ if __name__ == "__main__":
 
     log_bot = TeleBot(token=bot_token)
 
-    logger = logging.getLogger()
     logger.setLevel(logging.INFO)
     logger.addHandler(TelegramLogsHandler(log_bot, chat_id))
-    logging.info('VK bot started!')
 
     try:
         bot_srart()
+        logger.info('VK bot started!')
     except Exception as e:
-        logging.exception(e)
+        logger.exception(e)
