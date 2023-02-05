@@ -10,8 +10,8 @@ logger = logging.getLogger()
 
 
 class TelegramBot:
-    def __init__(self, BOT_TOKEN, PROJECT_ID):
-        self.bot = TeleBot(token=BOT_TOKEN)
+    def __init__(self, bot_token, project_id):
+        self.bot = TeleBot(token=bot_token)
         logger.info('Tg bot started!')
 
         @self.bot.message_handler(commands=['start'])
@@ -24,7 +24,7 @@ class TelegramBot:
         @self.bot.message_handler(content_types=["text"])
         def repeat_all_messages(message):
             answer = detect_intent_texts(
-                PROJECT_ID,
+                project_id,
                 session_id=message.chat.id,
                 texts=message.text,
                 language_code='ru-RU'
