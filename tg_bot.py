@@ -1,6 +1,6 @@
 import os
+
 from telebot import TeleBot
-from telebot import types
 from dotenv import load_dotenv
 from get_intent_text import detect_intent_texts
 from bot_logging import TelegramLogsHandler
@@ -9,29 +9,60 @@ import logging
 logger = logging.getLogger()
 
 
-class TelegramBot:
-    def __init__(self, bot_token, project_id):
-        self.bot = TeleBot(token=bot_token)
-        logger.info('Tg bot started!')
+class CommandHandler:
+    def __init__(self, bot):
+        self.bot = bot
 
+    def handle(self):
         @self.bot.message_handler(commands=['start'])
-        def start_message(message):
-            bot_command = types.BotCommand('start', 'Стартовая страница')
-            command_scope = types.BotCommandScopeChat(message.chat.id)
-            self.bot.set_my_commands([bot_command], command_scope)
-            self.bot.send_message(message.chat.id, text='Привет!')
+        def handle(msg) -> None:
+            if msg.text == '/start':
+                self.bot.send_message(msg.chat.id, 'Привет!')
 
+
+class TextHandler:
+    def __init__(self, bot, project_id):
+        self.bot = bot
+        self.project_id = project_id
+
+    def handle(self):
         @self.bot.message_handler(content_types=["text"])
-        def repeat_all_messages(message):
+        def text_handle(msg) -> None:
             answer = detect_intent_texts(
-                project_id,
-                session_id=message.chat.id,
-                texts=message.text,
+                self.project_id,
+                session_id=msg.chat.id,
+                texts=msg.text,
                 language_code='ru-RU'
             ).fulfillment_text
-            self.bot.send_message(message.chat.id, answer)
+            self.bot.send_message(msg.chat.id, answer)
 
-        self.bot.infinity_polling()
+
+class MainHandler:
+    def __init__(self, bot, project_id):
+        self._bot = bot
+        self.project_id = project_id
+        self._com_handler = CommandHandler(self._bot)
+        self._text_handler = TextHandler(self._bot, self.project_id)
+
+    def handle(self) -> None:
+        self._com_handler.handle()
+        self._text_handler.handle()
+
+
+class TelegramBot:
+
+    def __init__(self, bot, project_id):
+        self._bot = bot
+        self.project_id = project_id
+        self._handler = MainHandler(self._bot, self.project_id)
+        self._t_handler = MainHandler(self._bot, self.project_id)
+
+    def _start(self) -> None:
+        self._handler.handle()
+
+    def run(self) -> None:
+        self._start()
+        self._bot.polling(non_stop=True)
 
 
 def main():
@@ -45,7 +76,8 @@ def main():
     logger.addHandler(TelegramLogsHandler(bot, chat_id))
 
     try:
-        TelegramBot(bot_token, project_id)
+        bot = TelegramBot(bot, project_id)
+        bot.run()
 
     except Exception as e:
         logger.exception(e)
