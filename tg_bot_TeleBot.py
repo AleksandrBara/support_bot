@@ -8,7 +8,6 @@ import logging
 
 logger = logging.getLogger()
 
-
 class CommandHandler:
     def __init__(self, bot):
         self.bot = bot
@@ -77,6 +76,7 @@ def main():
 
     try:
         bot = TelegramBot(bot, project_id)
+        logger.info('TG_bot started')
         bot.run()
 
     except Exception as e:
