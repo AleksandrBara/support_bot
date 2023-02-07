@@ -37,7 +37,13 @@
 ### Телеграмм бот:
     
 ```
-    python3 tg_bot.py 
+    python3 tg_bot_TeleBot.py 
+``` 
+
+##### или
+
+```
+    python3 tg_bot_telegram.py 
 ``` 
 
 ### Бот Вконтакте:
